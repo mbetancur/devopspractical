@@ -2,10 +2,12 @@ pipeline {
   agent any
   stages {
     stage('Build') {
-      post{
-        always{
+      post {
+        always {
           archiveArtifacts(artifacts: "build/distributions/${packageName}", fingerprint: true)
+
         }
+
       }
       steps {
         sh '''
@@ -18,7 +20,9 @@ pipeline {
       post {
         always {
           junit 'build/test-results/test/*.xml'
+
         }
+
       }
       steps {
         sh './gradlew test'
@@ -26,10 +30,11 @@ pipeline {
     }
     stage('SonarQube') {
       steps {
-        withSonarQubeEnv('SonarQube Cloud') {
+        withSonarQubeEnv('SonarGCloud') {
           sh 'sonar-scanner -Dproject.settings=sonar.properties'
         }
-        sleep(10)
+
+        sleep 10
         waitForQualityGate true
       }
     }
@@ -46,10 +51,10 @@ pipeline {
       steps {
         withAWS(credentials: 'awslab', region: 'us-east-1') {
           cfnUpdate(stack: "${projectName}-lambda", create: true, file: 'lambda.yaml', params: [
-                          "ProjectName=${projectName}",
-                          "PackageName=${packageName}",
-                          "BucketName=${projectName}-bucket"
-                        ])
+                                      "ProjectName=${projectName}",
+                                      "PackageName=${packageName}",
+                                      "BucketName=${projectName}-bucket"
+                                    ])
             sh "aws cloudformation list-exports --query \"Exports[?Name == '${projectName}-lambda-Endpoint'].Value\" --output text"
           }
 
