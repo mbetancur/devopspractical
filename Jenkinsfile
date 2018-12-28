@@ -26,7 +26,7 @@ pipeline {
     }
     stage('SonarQube') {
       steps {
-        withSonarQubeEnv('SonarQube Cloud') {
+        withSonarQubeEnv('SonarGCloud') {
           sh 'sonar-scanner -Dproject.settings=sonar.properties'
         }
         sleep(10)
