@@ -27,7 +27,7 @@ pipeline {
     stage('SonarQube') {
       steps {
         withSonarQubeEnv('SonarGCloud') {
-          sh 'sonar-scanner -Dproject.settings=sonar.properties -X'
+          sh 'sonar-scanner -Dproject.settings=sonar.properties -Dproject.name=${projectName} -X'
         }
         sleep(10)
         waitForQualityGate true
