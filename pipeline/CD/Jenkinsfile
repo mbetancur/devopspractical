@@ -1,5 +1,9 @@
 pipeline {
   agent any
+  environment {
+      projectName = 'tns-devops-juanes'
+      packageName = "lambdaGradle-${BUILD_NUMBER}.zip"
+  }
   stages {
     stage('Build') {
       post{
@@ -52,12 +56,7 @@ pipeline {
                         ])
             sh "aws cloudformation list-exports --query \"Exports[?Name == '${projectName}-lambda-Endpoint'].Value\" --output text"
           }
-
         }
       }
-    }
-    environment {
-      projectName = 'tns-devops-juanes'
-      packageName = "lambdaGradle-${BUILD_NUMBER}.zip"
     }
   }
