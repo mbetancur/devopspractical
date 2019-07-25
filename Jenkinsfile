@@ -57,7 +57,7 @@ pipeline {
       }
     }
     environment {
-      projectName = 'juanes-project'
+      projectName = 'tns-devops-juanes'
       packageName = "lambdaGradle-${BUILD_NUMBER}.zip"
     }
   }
